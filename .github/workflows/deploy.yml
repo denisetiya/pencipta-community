@@ -79,7 +79,7 @@ jobs:
             cat > /opt/community-assistant/.env <<'EOF'
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            AI_BASE_URL=http://host.docker.internal:20128/v1
+            AI_BASE_URL=${{ secrets.AI_BASE_URL }}
             AI_API_KEY=${{ secrets.AI_API_KEY }}
             AI_MODEL=atomix
             EOF
