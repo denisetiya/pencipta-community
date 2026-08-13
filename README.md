@@ -1,36 +1,145 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sage Community — AI Knowledge & Mentorship Network
+
+A high-trust knowledge community layered on a familiar social feed. Anyone "tells their
+story" once; AI extracts a structured **Sage Profile** (what they know, what they want
+to learn). Search and matching run on these profiles, and every connection request
+carries context + an AI-generated icebreaker — replacing cold outreach with a warm,
+context-rich handshake.
+
+Built for **Tecnofest** — a working prototype of the concept applied on top of an
+nsosyal-style social platform.
+
+## Features
+
+- **Story-Based Onboarding (AI)** — chat freely, AI generates your Sage Profile
+  (summary, skills, interests, experience) in one call.
+- **AI Solution Discovery** — natural-language search ("find someone who's raised
+  funding") → ranked matches with trust score + *"Why this person"* evidence.
+- **Mentorship Handshake** — every request carries a context question + AI icebreaker
+  that references a real detail from the sage's profile. Sage accepts/declines with full
+  context.
+- **Ask the Community (AI)** — get an answer grounded in the community corpus, with
+  clickable citations to the people who can help.
+- **Social base** — feed, posts, likes, comments, follows, hashtags & trends.
+
+## Tech Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | Next.js 16 (App Router, Turbopack) |
+| Language | TypeScript 5.9 |
+| Styling | Tailwind CSS v4 |
+| ORM / DB | Prisma 7 (driver adapter) + PostgreSQL |
+| Auth | NextAuth (Auth.js v5) — *planned* |
+| LLM | Self-hosted OpenAI-compatible API (DeepSeek v4 Pro / atomix), 1M context |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js ≥ 20, pnpm ≥ 11
+- PostgreSQL running locally (e.g. `docker run -d --name pg -p 5432:5432 -e POSTGRES_PASSWORD=... postgres:16`)
+- A reachable OpenAI-compatible LLM endpoint
+
+### Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# 1. Install dependencies
+pnpm install
+
+# 2. Configure environment
+cp .env.example .env
+#   DATABASE_URL: your Postgres connection string
+#   AI_BASE_URL / AI_API_KEY / AI_MODEL: your LLM endpoint
+
+# 3. Create the database, run migrations, seed demo accounts
+pnpm db:migrate
+pnpm db:seed
+
+# 4. Run the dev server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | Postgres connection string |
+| `AI_BASE_URL` | Base URL of the OpenAI-compatible LLM endpoint (e.g. `http://localhost:8080/v1`) |
+| `AI_API_KEY` | API key for the LLM endpoint |
+| `AI_MODEL` | Model id served by the endpoint |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+Layered architecture — request flows down, dependencies point down, each layer is
+replaceable:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+  app/                          # Presentation: routing + thin handlers
+    api/
+      hello/route.ts            # smoke-test endpoint: GET /api/hello
+      onboarding/route.ts       # POST — chat → Sage Profile
+      search/route.ts           # POST — natural-language matchmaking
+      connect/route.ts          # POST/PATCH — request + accept/decline
+      ask/route.ts              # POST — Ask the Community agent
+  server/                       # Application layer (server-only)
+    ai/
+      prompts/                  # Pure prompt builders (no I/O)
+        extraction.ts  matching.ts  icebreaker.ts  ask.ts
+      pipelines/                # Build prompt → call LLM → validate output (zod)
+        extraction.pipeline.ts  matching.pipeline.ts
+        icebreaker.pipeline.ts  ask.pipeline.ts
+    services/                   # Use cases: orchestrate pipelines + DB
+      onboarding.service.ts     search.service.ts
+      connection.service.ts     ask.service.ts
+    schemas/                    # Zod input validation
+      onboarding.schema.ts  search.schema.ts  connect.schema.ts  ask.schema.ts
+    http/
+      errors.ts                 # ApiError (status + code)
+      response.ts               # jsonOk / toHttpError (incl. zod mapping)
+  lib/                          # Infrastructure: external adapters
+    llm.ts                      # chatJSON<T>() / chatText() → OpenAI-compatible LLM
+    prisma.ts                   # Prisma 7 client (driver adapter)
+prisma/
+  schema.prisma                 # 9 models: User, SageProfile, Post, Like, Comment,
+                                # Follow, Hashtag, Connection, ChatSession
+  seed.ts                       # demo accounts (aya = seeker, gökçe = sage)
+docs/
+  PRD.md                        # full product requirements document
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Data flow example** — `POST /api/search`:
+`route.ts (parse+validate)` → `search.service.ts (load profiles)` →
+`matching.pipeline.ts (prompt → LLM → zod check)` → `prompts/matching.ts (pure)` →
+`lib/llm.ts (HTTP)` → back up with `response.ts (jsonOk / toHttpError)`.
 
-## Deploy on Vercel
+## Useful Commands
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm dev            # dev server
+pnpm build          # production build
+pnpm lint           # eslint
+pnpm db:migrate     # apply Prisma migrations
+pnpm db:seed        # seed demo data
+pnpm db:generate    # regenerate Prisma client
+pnpm exec prisma studio  # browse the database
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Demo Flow (90 seconds)
+
+1. Login with a demo seeker account.
+2. Onboarding: type a short story → Sage Profile generates → confirm.
+3. Explore: "find someone who has raised funding" → match cards with trust score +
+   "Why this person" + evidence.
+4. Connect: request with context + AI icebreaker → send.
+5. Switch to the sage demo account → inbox shows context + icebreaker → Accept.
+
+## Roadmap
+
+- **MVP**: clone base + 3 AI pipelines + connect flow + demo seed *(current)*
+- **v1.1**: Ask the Community agent; auto-index posts/comments into the knowledge
+  graph; reputation/sage points.
+- **v2.0**: real-time chat sessions, skill verification from sessions, mobile apps.

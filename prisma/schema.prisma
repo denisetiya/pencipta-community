@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SageProfileStatus {
+  ACTIVE
+  HIDDEN
+}
+
+enum SageProfileSource {
+  AI_GENERATED
+  SELF_ADDED
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String?
+  handle       String    @unique
+  avatarUrl    String?
+  headline     String?
+  bio          String?
+  createdAt    DateTime  @default(now())
+
+  sageProfile        SageProfile?
+  posts              Post[]
+  likes              Like[]
+  comments           Comment[]
+  following          Follow[] @relation("Follower")
+  followers          Follow[] @relation("Followee")
+  connectionsAsMentor Connection[] @relation("Mentor")
+  connectionsAsMentee Connection[] @relation("Mentee")
+  chatSessionsAsMentor ChatSession[] @relation("ChatMentor")
+  chatSessionsAsMentee ChatSession[] @relation("ChatMentee")
+}
+
+model SageProfile {
+  id              String            @id @default(cuid())
+  userId          String            @unique
+  summary         String
+  skills          String[]
+  interests       String[]
+  keywords        String[]
+  experienceYears Int?
+  status          SageProfileStatus @default(ACTIVE)
+  source          SageProfileSource @default(AI_GENERATED)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  authorId  String
+  content   String
+  upvotes   Int      @default(0)
+  createdAt DateTime @default(now())
+
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes     Like[]
+  comments  Comment[]
+  hashtags  Hashtag[]
+}
+
+model Like {
+  id     String @id @default(cuid())
+  userId String
+  postId String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Follow {
+  id         String   @id @default(cuid())
+  followerId String
+  followeeId String
+  createdAt  DateTime @default(now())
+
+  follower User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followee User @relation("Followee", fields: [followeeId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followeeId])
+}
+
+model Hashtag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[]
+}
+
+model Connection {
+  id             String           @id @default(cuid())
+  mentorId       String
+  menteeId       String
+  requestContext String
+  icebreaker     String
+  status         ConnectionStatus @default(PENDING)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  mentor User @relation("Mentor", fields: [mentorId], references: [id], onDelete: Cascade)
+  mentee User @relation("Mentee", fields: [menteeId], references: [id], onDelete: Cascade)
+
+  @@index([mentorId, status])
+}
+
+model ChatSession {
+  id           String   @id @default(cuid())
+  mentorId     String
+  menteeId     String
+  summary      String?
+  outcome      String?
+  skillVerified String[]
+  createdAt    DateTime @default(now())
+
+  mentor User @relation("ChatMentor", fields: [mentorId], references: [id], onDelete: Cascade)
+  mentee User @relation("ChatMentee", fields: [menteeId], references: [id], onDelete: Cascade)
+}
