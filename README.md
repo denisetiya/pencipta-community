@@ -60,7 +60,7 @@ pnpm db:seed
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [link](https://tecnofest.denisetiya.site/)
 
 ### Environment Variables
 
