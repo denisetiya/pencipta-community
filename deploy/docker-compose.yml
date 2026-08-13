@@ -46,7 +46,7 @@ services:
 networks:
   router:
     external: true
-    name: 9router_default
+    name: ${ROUTER_NETWORK}
 
 volumes:
   community_pgdata:
