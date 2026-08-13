@@ -79,6 +79,7 @@ replaceable:
 ```
 src/
   app/                          # Presentation: routing + thin handlers
+    page.tsx                    # landing (AppShell)
     api/
       hello/route.ts            # smoke-test endpoint: GET /api/hello
       onboarding/route.ts       # POST - chat → Pencipta Profile
@@ -100,9 +101,15 @@ src/
     http/
       errors.ts                 # ApiError (status + code)
       response.ts               # jsonOk / toHttpError (incl. zod mapping)
-  lib/                          # Infrastructure: external adapters
+  components/
+    ui/                         # Design-system primitives (Button, Card, Avatar,
+                                #   Badge, Input, Textarea, Spinner)
+    layout/                     # Sidebar, AppShell
+  lib/                          # Infrastructure + shared client helpers
     llm.ts                      # chatJSON<T>() / chatText() → OpenAI-compatible LLM
     prisma.ts                   # Prisma 7 client (driver adapter)
+    api.ts                      # typed client → /api/* (OnboardingResult, SearchMatch…)
+    utils.ts                    # cn(), initials(), timeAgo()
 prisma/
   schema.prisma                 # 9 models: User, Profile, Post, Like, Comment,
                                 # Follow, Hashtag, Connection, ChatSession
@@ -115,6 +122,10 @@ docs/
 `route.ts (parse+validate)` → `search.service.ts (load profiles)` →
 `matching.pipeline.ts (prompt → LLM → zod check)` → `prompts/matching.ts (pure)` →
 `lib/llm.ts (HTTP)` → back up with `response.ts (jsonOk / toHttpError)`.
+
+Note on `app/api`: Next.js requires route handlers (`route.ts`) to live inside `app/`.
+The handlers are kept as thin controllers that delegate to `server/` - all business
+logic and AI stay framework-free.
 
 ## Useful Commands
 
