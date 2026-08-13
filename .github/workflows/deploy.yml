@@ -46,11 +46,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Make GHCR package public
-        run: |
-          gh api --method PATCH "user/packages/container/community-assistant" \
-            -f visibility=public || echo "warning: could not set visibility (may already be public)"
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -84,7 +79,7 @@ jobs:
             AI_API_KEY=${{ secrets.AI_API_KEY }}
             AI_MODEL=atomix
             EOF
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin || true
+            echo "$(grep '^GH_TOKEN=' /root/.env | cut -d= -f2)" | docker login ghcr.io -u denisetiya --password-stdin || true
             cd /opt/community-assistant
             docker compose up -d --pull always
             docker image prune -f
