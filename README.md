@@ -31,7 +31,7 @@ nsosyal-style social platform.
 | Styling | Tailwind CSS v4 |
 | ORM / DB | Prisma 7 (driver adapter) + PostgreSQL |
 | Auth | NextAuth (Auth.js v5) — *planned* |
-| LLM | Self-hosted OpenAI-compatible API (DeepSeek v4 Pro / atomix), 1M context |
+| LLM | Self-hosted OpenAI-compatible API (DeepSeek v4 Pro), 1M context |
 
 ## Getting Started
 
