@@ -43,6 +43,18 @@ export function Header({
     return (
       <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-zinc-200/80 bg-white/95 px-6 backdrop-blur-md">
         <div className="flex items-center gap-3">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              title="Back to Home"
+              aria-label="Back to Home"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-colors cursor-pointer"
+            >
+              <ChevronLeft className="h-5 w-5 stroke-[2.2]" />
+            </button>
+          )}
+
           {onToggleDesktopSidebar && (
             <button
               type="button"
