@@ -30,7 +30,7 @@ services:
     container_name: community_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: sage
+      POSTGRES_USER: pencipta
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: community_assistant
     ports:
@@ -38,7 +38,7 @@ services:
     volumes:
       - community_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sage -d community_assistant"]
+      test: ["CMD-SHELL", "pg_isready -U pencipta -d community_assistant"]
       interval: 5s
       timeout: 3s
       retries: 10
