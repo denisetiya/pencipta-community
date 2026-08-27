@@ -55,7 +55,7 @@ export function Input({
   };
 
   return (
-    <div className="w-full bg-white/95 backdrop-blur-md pt-2 pb-4 px-4 sm:px-6 border-t border-zinc-100/80">
+    <div className="w-full shrink-0 bg-white/95 backdrop-blur-md pt-2 pb-2.5 sm:pb-4 px-3 sm:px-6 border-t border-zinc-100/80">
       <div className="mx-auto w-full max-w-3xl flex flex-col">
         <input
           ref={fileInputRef}
@@ -80,7 +80,7 @@ export function Input({
         )}
 
         <div
-          className={`relative flex items-center rounded-full border bg-white px-3.5 py-1.5 shadow-xs transition-all duration-200 ${
+          className={`relative flex items-center rounded-full border bg-white px-3 py-1 sm:px-3.5 sm:py-1.5 shadow-xs transition-all duration-200 ${
             isFocused
               ? "border-zinc-400 ring-2 ring-zinc-900/10 shadow-sm"
               : "border-zinc-200 hover:border-zinc-300"
@@ -91,9 +91,9 @@ export function Input({
             onClick={() => fileInputRef.current?.click()}
             aria-label="Attach file"
             title="Attach document or image"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 active:scale-95 focus-visible:outline-none cursor-pointer"
+            className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 active:scale-95 focus-visible:outline-none cursor-pointer"
           >
-            <Paperclip className="h-5 w-5 rotate-45 stroke-[1.8]" />
+            <Paperclip className="h-4 w-4 sm:h-5 sm:w-5 rotate-45 stroke-[1.8]" />
           </button>
 
           <textarea
@@ -105,7 +105,7 @@ export function Input({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder={placeholder}
-            className="mx-2 max-h-36 min-h-[24px] flex-1 resize-none bg-transparent py-1.5 text-[15px] leading-snug text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
+            className="mx-1.5 sm:mx-2 max-h-32 min-h-[22px] sm:min-h-[24px] flex-1 resize-none bg-transparent py-1 text-sm sm:text-[15px] leading-snug text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
           />
 
           <button
@@ -114,18 +114,18 @@ export function Input({
             disabled={(!value.trim() && !attachment) || isLoading}
             aria-label="Send message"
             title="Send (Enter)"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-white transition-all duration-150 hover:bg-zinc-800 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 cursor-pointer shadow-xs"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-white transition-all duration-150 hover:bg-zinc-800 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 cursor-pointer shadow-xs"
           >
-            <SendHorizontal className="h-4 w-4 stroke-[2.2] translate-x-0.5" />
+            <SendHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4 stroke-[2.2] translate-x-0.5" />
           </button>
         </div>
 
-        <p className="mt-2.5 text-center text-[11px] sm:text-xs text-zinc-400 leading-tight select-none">
+        <p className="mt-1.5 sm:mt-2.5 text-center text-[10px] sm:text-xs text-zinc-400 leading-tight select-none">
           The assistant always asks for confirmation before changing or publishing something.
         </p>
 
         {platform === "ios" && (
-          <div className="mt-2.5 flex justify-center">
+          <div className="mt-1.5 sm:mt-2.5 flex justify-center">
             <div className="h-1 w-32 rounded-full bg-zinc-950/80" />
           </div>
         )}

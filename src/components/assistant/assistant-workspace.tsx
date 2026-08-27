@@ -130,7 +130,7 @@ export function AssistantWorkspace({
           activeView={activeView}
         />
 
-        <main className="flex flex-1 flex-col overflow-hidden bg-white">
+        <main className="flex flex-1 min-h-0 flex-col overflow-hidden bg-white">
           {activeView === "history" ? (
             <HistoryView
               conversations={conversations}
@@ -196,7 +196,7 @@ export function AssistantWorkspace({
       </aside>
 
       {/* Main Content Pane */}
-      <main className="flex flex-1 flex-col overflow-hidden bg-white">
+      <main className="flex flex-1 min-h-0 flex-col overflow-hidden bg-white">
         {/* Desktop Header on screens >= 768px */}
         <div className="hidden md:block">
           <Header
