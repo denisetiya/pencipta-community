@@ -4,8 +4,28 @@ import React, { useState, useEffect, useRef } from "react";
 import { useViewport, PlatformType } from "@/context/viewport-context";
 import { Smartphone, Bot, EyeOff, Wrench, Layout } from "lucide-react";
 
+function getInitialDevMode(): boolean {
+  if (process.env.NODE_ENV !== "production") return true;
+  if (process.env.NEXT_PUBLIC_ENABLE_DEVTOOLS === "true") return true;
+  if (typeof window !== "undefined") {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("dev") === "true" || urlParams.get("dev") === "1") {
+        localStorage.setItem("pencipta_dev_mode", "true");
+        return true;
+      }
+      if (localStorage.getItem("pencipta_dev_mode") === "true") {
+        return true;
+      }
+    } catch {
+      // Ignore storage error
+    }
+  }
+  return false;
+}
+
 export function DevToolbar() {
-  const isDev = process.env.NODE_ENV !== "production";
+  const [isClientDev] = useState<boolean>(getInitialDevMode);
   const { platform, setPlatform } = useViewport();
 
   // Default auto-hidden into the compact floating trigger icon
@@ -49,8 +69,8 @@ export function DevToolbar() {
     setPlatform(p);
   };
 
-  // Automatically disabled in production
-  if (!isDev) {
+  // Disabled if not in dev mode or explicitly enabled
+  if (!isClientDev) {
     return null;
   }
 
