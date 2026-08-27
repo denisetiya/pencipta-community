@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { AppShell } from "@/components/layout/app-shell";
-import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 export default function Home() {
   return (
@@ -12,10 +10,13 @@ export default function Home() {
         <p className="max-w-md text-slate-600">
           Find the right person to ask - without the awkward first step.
         </p>
-        <Link href="/explore">
+        <Link href="/login">
           <Button>Get started</Button>
         </Link>
       </div>
     </AppShell>
+    <main className="flex min-h-screen w-full items-center justify-center bg-white">
+      <Logo size="lg" />
+    </main>
   );
 }
