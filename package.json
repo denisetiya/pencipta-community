@@ -1,5 +1,5 @@
 {
-  "name": "community-assistant",
+  "name": "pencipta-comunity",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,9 +12,13 @@
     "db:generate": "prisma generate"
   },
   "dependencies": {
+    "@better-auth/prisma-adapter": "^1.7.1",
+    "better-auth": "^1.7.1",
+    "lucide-react": "^1.34.0",
     "next": "16.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-icons": "^5.7.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

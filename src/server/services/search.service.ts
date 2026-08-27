@@ -50,7 +50,7 @@ export async function searchProfiles(query: string): Promise<SearchResult[]> {
     return {
       profileId: profile.id,
       name: profile.user.name,
-      handle: profile.user.handle,
+      handle: profile.user.handle ?? "",
       headline: profile.user.headline,
       summary: profile.summary,
       skills: profile.skills,

@@ -1,4 +1,4 @@
-# PRD: Sage Community — AI Knowledge & Mentorship Network
+# PRD: pencipta-comunity — AI Knowledge & Mentorship Network
 
 ## 1. Executive Summary
 
@@ -9,7 +9,7 @@ bothering a stranger ("they're too busy / too important / why would they answer 
 blocks the connection. Mentors, in turn, drown in vague, low-context requests.
 
 **Solution**: A high-trust knowledge community layered on a familiar social feed. Anyone
-"tells their story" once; AI extracts a structured Sage Profile (what they know, what
+"tells their story" once; AI extracts a structured Profile (what they know, what
 they want to learn). Search and matching run on these profiles, and every connection
 request carries context + an AI-generated icebreaker — replacing cold outreach with a
 warm, context-rich handshake. No forms, no awkwardness, no spam.
@@ -20,7 +20,7 @@ warm, context-rich handshake. No forms, no awkwardness, no spam.
   quote from the candidate's profile (zero fabricated citations).
 - 100% of connection requests require a context field + generated icebreaker before
   sending (anti-spam guarantee, provable in demo).
-- Onboarding chat → generated Sage Profile in one call; profile editable after.
+- Onboarding chat → generated Profile in one call; profile editable after.
 
 ## 2. User Experience & Functionality
 
@@ -28,7 +28,7 @@ warm, context-rich handshake. No forms, no awkwardness, no spam.
 | Persona | Role | Goal |
 |---|---|---|
 | Seeker | Anyone needing insight | Find the right person to ask, without cold-call awkwardness |
-| Sage | Anyone with experience to share | Help people meaningfully, without spam or vague asks |
+| Mentor | Anyone with experience to share | Help people meaningfully, without spam or vague asks |
 | Judge / Demo user | Evaluator | See the full loop work in ~90 seconds |
 
 *Any field qualifies — career, startups, engineering, design, finance, health, hobbies,
@@ -44,10 +44,10 @@ academics, life decisions. Roles are behavioral, not tied to age or title.*
    - **AC**: top-3 ranked results; each shows trust score 0-100 + "Why this person"
      block with reason + verbatim evidence; empty state when nothing fits.
 3. As a seeker, I want to request a conversation with context + a suggested first
-   message, so I'm not awkward and the sage can judge the request.
+   message, so I'm not awkward and the mentor can judge the request.
    - **AC**: request modal requires a context question; AI icebreaker generated
-     (≤50 words) referencing a real detail from the sage's profile; icebreaker editable.
-4. As a sage, I want to accept/decline requests showing the requester's context, so I
+     (≤50 words) referencing a real detail from the mentor's profile; icebreaker editable.
+4. As a mentor, I want to accept/decline requests showing the requester's context, so I
    only invest time in people worth helping.
    - **AC**: requests list shows seeker + context + icebreaker; accept → status becomes
      "accepted".
@@ -75,7 +75,7 @@ academics, life decisions. Roles are behavioral, not tied to age or title.*
   2. **Matching** (`POST /api/search`): query + all profiles → top-3
      `{profile_id, score, reason, evidence}`. Rule: `evidence` MUST be verbatim from the
      profile; drop non-fitting profiles.
-  3. **Icebreaker** (`POST /api/connect`): sage + request → first message ≤50 words
+  3. **Icebreaker** (`POST /api/connect`): mentor + request → first message ≤50 words
      referencing one real profile detail.
   4. **Ask the Community** (`POST /api/ask`): question → `{answer, citedProfiles[]}`.
 
@@ -94,7 +94,7 @@ academics, life decisions. Roles are behavioral, not tied to age or title.*
 - **Auth**: NextAuth credentials + one-click demo accounts (seeded).
 - **API**:
   - Social: post/like/comment/follow/profile/hashtag CRUD.
-  - Sage: `/api/onboarding`, `/api/search`, `/api/connect`, `/api/ask`,
+  - Core: `/api/onboarding`, `/api/search`, `/api/connect`, `/api/ask`,
     `/api/connections/:id/accept|decline`.
 - **Security**: no client-side secrets; LLM key server-only; validate all JSON inputs;
   error responses never leak prompt internals.
@@ -111,5 +111,5 @@ academics, life decisions. Roles are behavioral, not tied to age or title.*
 **Roadmap**:
 - **MVP (v1.0, 25 Aug)**: clone base + 3 AI pipelines + connect flow + demo seed.
 - **v1.1**: Ask the Community agent; auto-index posts/comments into knowledge graph;
-  reputation/sage points; request inbox polish.
+  reputation/mentor points; request inbox polish.
 - **v2.0**: real-time chat sessions, skill verification from sessions, mobile apps.

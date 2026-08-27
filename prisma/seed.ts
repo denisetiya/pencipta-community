@@ -7,11 +7,11 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const demoSeeker = await prisma.user.upsert({
-    where: { email: "seeker@demo.sage" },
+    where: { email: "seeker@demo.pencipta" },
     update: {},
     create: {
       name: "Aya",
-      email: "seeker@demo.sage",
+      email: "seeker@demo.pencipta",
       handle: "aya",
       headline: "Exploring a career shift into tech",
       bio: "Demo account — used for the onboarding + explore flow.",
@@ -19,11 +19,11 @@ async function main() {
   });
 
   const demoMentor = await prisma.user.upsert({
-    where: { email: "mentor@demo.sage" },
+    where: { email: "mentor@demo.pencipta" },
     update: {},
     create: {
       name: "Gökçe",
-      email: "mentor@demo.sage",
+      email: "mentor@demo.pencipta",
       handle: "gokce",
       headline: "Startup founder · raised 2 rounds",
       bio: "Demo account — used for the connect/inbox flow.",
