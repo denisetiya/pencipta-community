@@ -29,6 +29,9 @@ nsosyal-style social platform.
 | Framework | Next.js 16 (App Router, Turbopack) |
 | Language | TypeScript 5.9 (Strict Mode) |
 | Styling | Tailwind CSS v4 |
+| ORM / DB | Prisma 7 (driver adapter) + PostgreSQL |
+| Auth | NextAuth (Auth.js v5) — *planned* |
+| LLM | Self-hosted OpenAI-compatible API (DeepSeek v4 Pro), 1M context |
 | Icons | Lucide React |
 | ORM / DB | Prisma 7 (Driver Adapter) + PostgreSQL 16 |
 | LLM | OpenAI-compatible API (DeepSeek v4 Pro / atomix) |
@@ -122,7 +125,7 @@ pnpm db:seed
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [link](https://tecnofest.denisetiya.site/)
 
 ## Useful Commands
 

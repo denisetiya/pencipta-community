@@ -24,26 +24,31 @@ enum ConnectionStatus {
 }
 
 model User {
-  id           String    @id @default(cuid())
-  name         String
-  email        String    @unique
-  passwordHash String?
-  handle       String    @unique
-  avatarUrl    String?
-  headline     String?
-  bio          String?
-  createdAt    DateTime  @default(now())
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  handle    String?  @unique
+  avatarUrl String?
+  headline  String?
+  bio       String?
+  createdAt DateTime @default(now())
 
-  sageProfile        SageProfile?
-  posts              Post[]
-  likes              Like[]
-  comments           Comment[]
-  following          Follow[] @relation("Follower")
-  followers          Follow[] @relation("Followee")
-  connectionsAsMentor Connection[] @relation("Mentor")
-  connectionsAsMentee Connection[] @relation("Mentee")
+  sageProfile          SageProfile?
+  posts                Post[]
+  likes                Like[]
+  comments             Comment[]
+  following            Follow[]      @relation("Follower")
+  followers            Follow[]      @relation("Followee")
+  connectionsAsMentor  Connection[]  @relation("Mentor")
+  connectionsAsMentee  Connection[]  @relation("Mentee")
   chatSessionsAsMentor ChatSession[] @relation("ChatMentor")
   chatSessionsAsMentee ChatSession[] @relation("ChatMentee")
+  emailVerified        Boolean       @default(false)
+  updatedAt            DateTime      @default(now()) @updatedAt
+  sessions             Session[]
+  accounts             Account[]
+
+  @@map("user")
 }
 
 model SageProfile {
@@ -69,16 +74,16 @@ model Post {
   upvotes   Int      @default(0)
   createdAt DateTime @default(now())
 
-  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  likes     Like[]
-  comments  Comment[]
-  hashtags  Hashtag[]
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    Like[]
+  comments Comment[]
+  hashtags Hashtag[]
 }
 
 model Like {
-  id     String @id @default(cuid())
-  userId String
-  postId String
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -133,14 +138,64 @@ model Connection {
 }
 
 model ChatSession {
-  id           String   @id @default(cuid())
-  mentorId     String
-  menteeId     String
-  summary      String?
-  outcome      String?
+  id            String   @id @default(cuid())
+  mentorId      String
+  menteeId      String
+  summary       String?
+  outcome       String?
   skillVerified String[]
-  createdAt    DateTime @default(now())
+  createdAt     DateTime @default(now())
 
   mentor User @relation("ChatMentor", fields: [mentorId], references: [id], onDelete: Cascade)
   mentee User @relation("ChatMentee", fields: [menteeId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  issuer                String
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([issuer, accountId], map: "account_issuer_accountId_uidx")
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
