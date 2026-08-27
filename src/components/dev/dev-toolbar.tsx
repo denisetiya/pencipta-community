@@ -24,6 +24,24 @@ function getInitialDevMode(): boolean {
   return false;
 }
 
+function getInitialPosition(): { x: number; y: number } | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem("pencipta_dev_tools_pos");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (typeof parsed.x === "number" && typeof parsed.y === "number") {
+        const clampedX = Math.min(Math.max(12, parsed.x), window.innerWidth - 50);
+        const clampedY = Math.min(Math.max(12, parsed.y), window.innerHeight - 50);
+        return { x: clampedX, y: clampedY };
+      }
+    }
+  } catch {
+    // Ignore
+  }
+  return null;
+}
+
 export function DevToolbar() {
   const [isClientDev] = useState<boolean>(getInitialDevMode);
   const { platform, setPlatform } = useViewport();
@@ -33,6 +51,18 @@ export function DevToolbar() {
   const [isVisibleOnScroll, setIsVisibleOnScroll] = useState(true);
   const lastScrollY = useRef(0);
   const autoHideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Draggable position state initialized lazily
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(getInitialPosition);
+  const isPointerDownRef = useRef(false);
+  const isDraggingRef = useRef(false);
+  const dragStartRef = useRef<{ startX: number; startY: number; initX: number; initY: number }>({
+    startX: 0,
+    startY: 0,
+    initX: 0,
+    initY: 0,
+  });
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   // Auto-hide toolbar on scroll down
   useEffect(() => {
@@ -61,6 +91,7 @@ export function DevToolbar() {
   }, []);
 
   const handleOpenToolbar = () => {
+    if (isDraggingRef.current) return;
     setIsCollapsed(false);
     setIsVisibleOnScroll(true);
   };
@@ -69,23 +100,113 @@ export function DevToolbar() {
     setPlatform(p);
   };
 
+  // Pointer drag handlers
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.button !== 0) return;
+    isPointerDownRef.current = true;
+    isDraggingRef.current = false;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    dragStartRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      initX: rect.left,
+      initY: rect.top,
+    };
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // Ignore
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isPointerDownRef.current) return;
+
+    const deltaX = e.clientX - dragStartRef.current.startX;
+    const deltaY = e.clientY - dragStartRef.current.startY;
+
+    if (Math.hypot(deltaX, deltaY) > 5) {
+      isDraggingRef.current = true;
+    }
+
+    if (isDraggingRef.current) {
+      const buttonSize = 40;
+      const margin = 12;
+      const rawX = dragStartRef.current.initX + deltaX;
+      const rawY = dragStartRef.current.initY + deltaY;
+
+      const clampedX = Math.min(Math.max(margin, rawX), window.innerWidth - buttonSize - margin);
+      const clampedY = Math.min(Math.max(margin, rawY), window.innerHeight - buttonSize - margin);
+
+      setPosition({ x: clampedX, y: clampedY });
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isPointerDownRef.current) return;
+    isPointerDownRef.current = false;
+
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      // Ignore
+    }
+
+    if (isDraggingRef.current) {
+      if (position) {
+        try {
+          localStorage.setItem("pencipta_dev_tools_pos", JSON.stringify(position));
+        } catch {
+          // Ignore
+        }
+      }
+      setTimeout(() => {
+        isDraggingRef.current = false;
+      }, 50);
+    } else {
+      handleOpenToolbar();
+    }
+  };
+
   // Disabled if not in dev mode or explicitly enabled
   if (!isClientDev) {
     return null;
   }
 
-  // Collapsed / Auto-hidden Floating Trigger (Hanya Icon Kunci Tanpa Tulisan)
+  // Collapsed / Auto-hidden Floating Trigger (Draggable Floating Button)
   if (isCollapsed || !isVisibleOnScroll) {
+    const triggerStyle: React.CSSProperties = position
+      ? {
+          position: "fixed",
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          zIndex: 50,
+          touchAction: "none",
+        }
+      : {
+          position: "fixed",
+          top: "12px",
+          right: "12px",
+          zIndex: 50,
+          touchAction: "none",
+        };
+
     return (
-      <aside aria-label="Dev Mode Trigger" className="fixed top-3 right-3 z-50 animate-in fade-in zoom-in-95 duration-200">
+      <aside aria-label="Dev Mode Trigger" style={triggerStyle}>
         <button
+          ref={buttonRef}
           type="button"
-          onClick={handleOpenToolbar}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
           aria-label="Open Dev Tools"
-          title="Dev Tools"
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-950/90 text-white shadow-lg backdrop-blur-md hover:bg-zinc-800 hover:scale-110 active:scale-95 transition-all cursor-pointer ring-1 ring-white/20"
+          title="Drag to move, click to open Dev Tools"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-950/90 text-white shadow-xl backdrop-blur-md hover:bg-zinc-800 active:scale-95 transition-transform cursor-grab active:cursor-grabbing ring-1 ring-white/20 select-none touch-none"
         >
-          <Wrench className="h-4 w-4 text-cyan-400" />
+          <Wrench className="h-4 w-4 text-cyan-400 pointer-events-none" />
         </button>
       </aside>
     );

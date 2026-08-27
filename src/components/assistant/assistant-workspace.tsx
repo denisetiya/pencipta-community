@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAssistant } from "./context/assistant-context";
 import { useViewport, PlatformType } from "@/context/viewport-context";
 import { Header } from "./ui/header";
@@ -22,6 +23,7 @@ export function AssistantWorkspace({
   className = "",
   onClose,
 }: AssistantWorkspaceProps) {
+  const router = useRouter();
   const {
     activeView,
     activeSessionId,
@@ -47,10 +49,10 @@ export function AssistantWorkspace({
   const handleBack = () => {
     if (activeView === "history") {
       setActiveView("chat");
-    } else if (activeSessionId) {
-      startNewChat();
     } else if (onClose) {
       onClose();
+    } else {
+      router.push("/");
     }
   };
 
@@ -200,6 +202,7 @@ export function AssistantWorkspace({
           <Header
             title={currentSession ? currentSession.title : "AI Assistant"}
             platform="responsive"
+            onBack={handleBack}
             onNewChat={startNewChat}
             isDesktopSidebarOpen={isDesktopSidebarOpen}
             onToggleDesktopSidebar={() => setIsDesktopSidebarOpen(!isDesktopSidebarOpen)}
