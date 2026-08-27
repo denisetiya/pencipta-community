@@ -19,13 +19,13 @@ export async function requestConnection(
     include: { profile: true },
   });
 
-  if (!mentor?.profile) throw notFound("This person has no active Pencipta profile");
+  if (!mentor?.profile) throw notFound("This person has no active profile");
   if (!mentee) throw notFound("Requester not found");
 
   const existing = await prisma.connection.findFirst({
     where: { mentorId, menteeId, status: ConnectionStatus.PENDING },
   });
-  if (existing) throw badRequest("You already have a pending request with this pencipta");
+  if (existing) throw badRequest("You already have a pending request with this mentor");
 
   const icebreaker = await generateIcebreaker(
     {

@@ -1,47 +1,114 @@
-# pencipta community - AI Knowledge & Mentorship Network
+# pencipta-comunity - AI Knowledge & Mentorship Network
 
 A high-trust knowledge community layered on a familiar social feed. Anyone "tells their
-story" once; AI extracts a structured **Pencipta Profile** (what they know, what they want
+story" once; AI extracts a structured **Profile** (what they know, what they want
 to learn). Search and matching run on these profiles, and every connection request
 carries context + an AI-generated icebreaker - replacing cold outreach with a warm,
 context-rich handshake.
 
-Built for **Tecnofest** - a working prototype of the concept applied on top of an
+Built for **Tecnofest** - a senior-grade production prototype applied on top of an
 nsosyal-style social platform.
 
 ## Features
 
-- **Story-Based Onboarding (AI)** - chat freely, AI generates your Pencipta Profile
+- **Senior-Grade AI Assistant** - multi-modal chat interface with history drawer, capsule input, dynamic suggestions, auto-hiding floating drawer, and global keyboard shortcuts (`Cmd+K` / `Ctrl+K`).
+- **Dynamic Device Preview System** - live viewport switcher (`Responsive`, `Android`, `iOS` with hardware notch Dynamic Island) for instant testing across devices.
+- **Story-Based Onboarding (AI)** - chat freely, AI generates your Profile
   (summary, skills, interests, experience) in one call.
 - **AI Solution Discovery** - natural-language search ("find someone who's raised
   funding") → ranked matches with trust score + *"Why this person"* evidence.
 - **Mentorship Handshake** - every request carries a context question + AI icebreaker
-  that references a real detail from the pencipta's profile. Pencipta accepts/declines with full
-  context.
-- **Ask the Community (AI)** - get an answer grounded in the community corpus, with
-  clickable citations to the people who can help.
-- **Social base** - feed, posts, likes, comments, follows, hashtags & trends.
+  referencing real profile details. Mentor accepts/declines with full context.
+- **Ask the Community (AI)** - get answers grounded in the community corpus with citations.
+- **Social Base** - feed, posts, likes, comments, follows, hashtags & trends.
 
 ## Tech Stack
 
 | Layer | Choice |
 |---|---|
 | Framework | Next.js 16 (App Router, Turbopack) |
-| Language | TypeScript 5.9 |
+| Language | TypeScript 5.9 (Strict Mode) |
 | Styling | Tailwind CSS v4 |
 | ORM / DB | Prisma 7 (driver adapter) + PostgreSQL |
 | Auth | NextAuth (Auth.js v5) - *planned* |
 | LLM | Self-hosted OpenAI-compatible API (DeepSeek v4 Pro), 1M context |
+| Icons | Lucide React |
+| ORM / DB | Prisma 7 (Driver Adapter) + PostgreSQL 16 |
+| LLM | OpenAI-compatible API (DeepSeek v4 Pro / atomix) |
+
+## Project Structure
+
+```
+src/
+  app/                                  # Next.js App Router (pages & endpoints)
+    page.tsx                            # Landing / Home page
+    layout.tsx                          # Root layout with global providers & dev tools
+    icon.svg                            # Tab browser favicon & dynamic app icon
+    assistant/
+      page.tsx                          # Full-page AI Assistant workspace
+    ask/
+      page.tsx                          # Ask page entrypoint
+    api/
+      hello/route.ts                    # Smoke-test GET /api/hello
+      onboarding/route.ts               # POST - chat → Profile extraction
+      search/route.ts                   # POST - natural-language matching
+      connect/route.ts                  # POST/PATCH - mentorship connect & handshake
+      ask/route.ts                      # POST - Ask the Community agent
+  components/
+    assistant/                          # Modular AI Assistant domain
+      assistant-workspace.tsx           # Adaptive layout (full page / popup drawer)
+      index.ts                          # Clean barrel export
+      context/
+        assistant-context.tsx           # State management with lazy initializers
+      types/
+        assistant.types.ts              # Strict TypeScript domain interfaces
+      data/
+        mock-conversations.ts           # Demo conversation dataset
+      ui/
+        header.tsx                      # Header with iOS Dynamic Island / Android status bar
+        input.tsx                       # Capsule multi-modal prompt input
+        chat-view.tsx                   # Conversation stream & message bubbles
+        history-view.tsx                # Chat history search & management drawer
+      widget/
+        floating-widget.tsx             # Auto-hiding Floating Action Button & drawer
+    dev/
+      dev-toolbar.tsx                   # Auto-hiding viewport toggle (Responsive/Android/iOS)
+    layout/
+      app-shell.tsx                     # Social app responsive shell
+      sidebar.tsx                       # Global brand sidebar navigation
+      global-viewport.tsx               # Hardware-accurate device frames (iOS/Android)
+    ui/                                 # Global design system primitives
+      logo.tsx                          # Centralized brand Logo component (sm/md/lg/xl)
+      button.tsx                        # Core button variants
+      card.tsx                          # Card container
+      avatar.tsx                        # Profile avatar
+      badge.tsx                         # Badge chip
+      input.tsx                         # Form input
+      spinner.tsx                       # Loading spinner
+  context/
+    viewport-context.tsx                # Global viewport platform state
+  server/                               # Server-only backend application layer
+    ai/
+      prompts/                          # Pure prompt builders (no I/O)
+      pipelines/                        # LLM invocation & Zod schema validation
+    services/                           # Domain services & database orchestration
+    schemas/                            # Zod validation schemas
+    http/                               # HTTP response formatting & error handling
+  lib/                                  # Shared utilities & client wrappers
+    llm.ts                              # OpenAI-compatible LLM client
+    prisma.ts                           # Prisma 7 client instance
+    api.ts                              # Typed API client
+    utils.ts                            # Tailwind cn helper, formatters
+prisma/
+  schema.prisma                         # Prisma database schema
+  seed.ts                               # Seed data for demo accounts
+docs/
+  PRD.md                                # Product requirements document
+  ENGINEERING_RULES.md                  # Senior engineering standards & architecture rules
+```
+
 
 ## Getting Started
-
-### Prerequisites
-
-- Node.js ≥ 20, pnpm ≥ 11
-- PostgreSQL running locally (e.g. `docker run -d --name pg -p 5432:5432 -e POSTGRES_PASSWORD=... postgres:16`)
-- A reachable OpenAI-compatible LLM endpoint
-
-### Setup
 
 ```bash
 # 1. Install dependencies
@@ -49,108 +116,25 @@ pnpm install
 
 # 2. Configure environment
 cp .env.example .env
-#   DATABASE_URL: your Postgres connection string
-#   AI_BASE_URL / AI_API_KEY / AI_MODEL: your LLM endpoint
 
-# 3. Create the database, run migrations, seed demo accounts
+# 3. Apply database migrations and seed data
 pnpm db:migrate
 pnpm db:seed
 
-# 4. Run the dev server
+# 4. Run the development server
 pnpm dev
 ```
 
 Open [link](https://tecnofest.denisetiya.site/)
 
-### Environment Variables
-
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | Postgres connection string |
-| `AI_BASE_URL` | Base URL of the OpenAI-compatible LLM endpoint (e.g. `http://localhost:8080/v1`) |
-| `AI_API_KEY` | API key for the LLM endpoint |
-| `AI_MODEL` | Model id served by the endpoint |
-
-## Project Structure
-
-Layered architecture - request flows down, dependencies point down, each layer is
-replaceable:
-
-```
-src/
-  app/                          # Presentation: routing + thin handlers
-    page.tsx                    # landing (AppShell)
-    api/
-      hello/route.ts            # smoke-test endpoint: GET /api/hello
-      onboarding/route.ts       # POST - chat → Pencipta Profile
-      search/route.ts           # POST - natural-language matchmaking
-      connect/route.ts          # POST/PATCH - request + accept/decline
-      ask/route.ts              # POST - Ask the Community agent
-  server/                       # Application layer (server-only)
-    ai/
-      prompts/                  # Pure prompt builders (no I/O)
-        extraction.ts  matching.ts  icebreaker.ts  ask.ts
-      pipelines/                # Build prompt → call LLM → validate output (zod)
-        extraction.pipeline.ts  matching.pipeline.ts
-        icebreaker.pipeline.ts  ask.pipeline.ts
-    services/                   # Use cases: orchestrate pipelines + DB
-      onboarding.service.ts     search.service.ts
-      connection.service.ts     ask.service.ts
-    schemas/                    # Zod input validation
-      onboarding.schema.ts  search.schema.ts  connect.schema.ts  ask.schema.ts
-    http/
-      errors.ts                 # ApiError (status + code)
-      response.ts               # jsonOk / toHttpError (incl. zod mapping)
-  components/
-    ui/                         # Design-system primitives (Button, Card, Avatar,
-                                #   Badge, Input, Textarea, Spinner)
-    layout/                     # Sidebar, AppShell
-  lib/                          # Infrastructure + shared client helpers
-    llm.ts                      # chatJSON<T>() / chatText() → OpenAI-compatible LLM
-    prisma.ts                   # Prisma 7 client (driver adapter)
-    api.ts                      # typed client → /api/* (OnboardingResult, SearchMatch…)
-    utils.ts                    # cn(), initials(), timeAgo()
-prisma/
-  schema.prisma                 # 9 models: User, Profile, Post, Like, Comment,
-                                # Follow, Hashtag, Connection, ChatSession
-  seed.ts                       # demo accounts (aya = seeker, gökçe = pencipta)
-docs/
-  PRD.md                        # full product requirements document
-```
-
-**Data flow example** - `POST /api/search`:
-`route.ts (parse+validate)` → `search.service.ts (load profiles)` →
-`matching.pipeline.ts (prompt → LLM → zod check)` → `prompts/matching.ts (pure)` →
-`lib/llm.ts (HTTP)` → back up with `response.ts (jsonOk / toHttpError)`.
-
-Note on `app/api`: Next.js requires route handlers (`route.ts`) to live inside `app/`.
-The handlers are kept as thin controllers that delegate to `server/` - all business
-logic and AI stay framework-free.
-
 ## Useful Commands
 
 ```bash
-pnpm dev            # dev server
-pnpm build          # production build
-pnpm lint           # eslint
-pnpm db:migrate     # apply Prisma migrations
-pnpm db:seed        # seed demo data
-pnpm db:generate    # regenerate Prisma client
-pnpm exec prisma studio  # browse the database
+pnpm dev              # Start development server
+pnpm build            # Production build with Turbopack
+pnpm lint             # Run ESLint validation
+pnpm exec tsc --noEmit # Strict TypeScript check
+pnpm db:migrate       # Apply Prisma migrations
+pnpm db:seed          # Seed demo accounts
+pnpm exec prisma studio # Open database studio
 ```
-
-## Demo Flow (90 seconds)
-
-1. Login with a demo seeker account.
-2. Onboarding: type a short story → Pencipta Profile generates → confirm.
-3. Explore: "find someone who has raised funding" → match cards with trust score +
-   "Why this person" + evidence.
-4. Connect: request with context + AI icebreaker → send.
-5. Switch to the pencipta demo account → inbox shows context + icebreaker → Accept.
-
-## Roadmap
-
-- **MVP**: clone base + 3 AI pipelines + connect flow + demo seed *(current)*
-- **v1.1**: Ask the Community agent; auto-index posts/comments into the knowledge
-  graph; reputation/pencipta points.
-- **v2.0**: real-time chat sessions, skill verification from sessions, mobile apps.
