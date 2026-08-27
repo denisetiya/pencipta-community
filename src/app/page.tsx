@@ -12,7 +12,7 @@ export default function Home() {
         <p className="max-w-md text-slate-600">
           Find the right person to ask - without the awkward first step.
         </p>
-        <Link href="/explore">
+        <Link href="/login">
           <Button>Get started</Button>
         </Link>
       </div>
