@@ -19,13 +19,13 @@ export async function requestConnection(
     include: { sageProfile: true },
   });
 
-  if (!mentor?.sageProfile) throw notFound("This person has no active Sage profile");
+  if (!mentor?.sageProfile) throw notFound("This person has no active profile");
   if (!mentee) throw notFound("Requester not found");
 
   const existing = await prisma.connection.findFirst({
     where: { mentorId, menteeId, status: ConnectionStatus.PENDING },
   });
-  if (existing) throw badRequest("You already have a pending request with this sage");
+  if (existing) throw badRequest("You already have a pending request with this mentor");
 
   const icebreaker = await generateIcebreaker(
     {

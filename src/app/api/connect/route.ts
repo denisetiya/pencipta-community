@@ -22,15 +22,15 @@ export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json().catch(() => null);
     const connectionId = body?.connectionId as string | undefined;
-    const sageUserId = body?.userId as string | undefined;
+    const mentorUserId = body?.userId as string | undefined;
     const status = body?.status as "ACCEPTED" | "DECLINED" | undefined;
 
-    if (!connectionId || !sageUserId) throw badRequest("Missing connectionId / userId");
+    if (!connectionId || !mentorUserId) throw badRequest("Missing connectionId / userId");
     if (status !== "ACCEPTED" && status !== "DECLINED") {
       throw badRequest("status must be ACCEPTED or DECLINED");
     }
 
-    const connection = await updateConnectionStatus(connectionId, sageUserId, status);
+    const connection = await updateConnectionStatus(connectionId, mentorUserId, status);
     return jsonOk(connection);
   } catch (err) {
     return toHttpError(err);
