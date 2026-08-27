@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function AssistantPage() {
   return (
-    <div className="h-screen w-full overflow-hidden bg-white">
+    <div className="h-[100dvh] max-h-[100dvh] w-full overflow-hidden bg-white flex flex-col">
       <AssistantWorkspace mode="full" />
     </div>
   );
