@@ -35,10 +35,10 @@ export function DesktopRightSidebar() {
     },
     {
       id: "m3",
-      name: "Gokce",
+      name: "Klinik Koding",
       role: "Data Science Lead",
       experience: "5 YOE · Machine Learning",
-      initials: "GK",
+      initials: "KK",
     },
   ];
 

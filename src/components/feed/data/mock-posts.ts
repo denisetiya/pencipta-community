@@ -5,11 +5,11 @@ export const INITIAL_POSTS: PostItem[] = [
     id: "post-1",
     author: {
       id: "user-1",
-      name: "Gokce",
-      handle: "@gokce",
+      name: "Klinik Koding",
+      handle: "@klinikkoding",
       role: "Data Science",
       experience: "3 Years of Experience",
-      initials: "GK",
+      initials: "KK",
     },
     content:
       "Hello friends!\n\nMany people asked about the data structures material last week. We've put together an essential cheat sheet to prepare for tomorrow's midterm exam. Keep up the good work!\n\nThe link to the material is in the bio.",
