@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useSyncExternalStore } from "react";
 import type { PostItem, CreatePostInput, PostComment } from "../types/feed.types";
 import { INITIAL_POSTS } from "../data/mock-posts";
 
@@ -19,39 +19,64 @@ interface FeedContextType {
 
 const FeedContext = createContext<FeedContextType | null>(null);
 
-const STORAGE_KEY = "pencipta_community_feed_posts_v2";
+const STORAGE_KEY = "pencipta_community_feed_posts_v4";
 
-function getInitialPosts(): PostItem[] {
-  if (typeof window === "undefined") {
-    return INITIAL_POSTS;
+// In-memory feed store with useSyncExternalStore to eliminate React 19 hydration mismatch
+let inMemoryPosts: PostItem[] = INITIAL_POSTS;
+const listeners = new Set<() => void>();
+
+function notifyListeners() {
+  for (const listener of listeners) {
+    listener();
   }
+}
+
+function updateStore(newPosts: PostItem[]) {
+  inMemoryPosts = newPosts;
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed as PostItem[];
-      }
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newPosts));
     }
   } catch {
-    // Ignore storage parse error
+    // Ignore storage write error
   }
+  notifyListeners();
+}
+
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  return () => {
+    listeners.delete(callback);
+  };
+}
+
+function getSnapshot(): PostItem[] {
+  return inMemoryPosts;
+}
+
+function getServerSnapshot(): PostItem[] {
   return INITIAL_POSTS;
 }
 
 export function FeedProvider({ children }: { children: React.ReactNode }) {
-  // Lazy state initializer to prevent React 19 cascading re-renders
-  const [posts, setPosts] = useState<PostItem[]>(getInitialPosts);
+  const posts = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // Sync to localStorage purely as external side-effect
+  // Safely restore persisted custom posts on client mount without setState in effect
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          inMemoryPosts = parsed as PostItem[];
+          notifyListeners();
+        }
+      }
     } catch {
       // Ignore
     }
-  }, [posts]);
+  }, []);
 
   const openCreateModal = () => setIsCreateModalOpen(true);
   const closeCreateModal = () => setIsCreateModalOpen(false);
@@ -61,64 +86,61 @@ export function FeedProvider({ children }: { children: React.ReactNode }) {
   };
 
   const toggleLike = (postId: string) => {
-    setPosts((prev) =>
-      prev.map((post) => {
-        if (post.id !== postId) return post;
-        const isLiked = post.reactions.isLikedByMe ?? false;
-        const currentCount = post.reactions.rocketsCount;
+    const updated = posts.map((post) => {
+      if (post.id !== postId) return post;
+      const isLiked = post.reactions.isLikedByMe ?? false;
+      const currentCount = post.reactions.rocketsCount;
+      return {
+        ...post,
+        reactions: {
+          ...post.reactions,
+          isLikedByMe: !isLiked,
+          rocketsCount: isLiked ? Math.max(0, currentCount - 1) : currentCount + 1,
+        },
+      };
+    });
+    updateStore(updated);
+  };
+
+  const toggleRepost = (postId: string) => {
+    const updated = posts.map((post) => {
+      if (post.id !== postId) return post;
+      const isReposted = post.reactions.isRepostedByMe ?? false;
+      const currentCount = post.reactions.repostsCount;
+      return {
+        ...post,
+        reactions: {
+          ...post.reactions,
+          isRepostedByMe: !isReposted,
+          repostsCount: isReposted ? Math.max(0, currentCount - 1) : currentCount + 1,
+        },
+      };
+    });
+    updateStore(updated);
+  };
+
+  const toggleCommentLike = (postId: string, commentId: string) => {
+    const updated = posts.map((post) => {
+      if (post.id !== postId || !post.comments) return post;
+      const updatedComments = post.comments.map((comment) => {
+        if (comment.id !== commentId) return comment;
+        const isLiked = comment.reactions.isLikedByMe ?? false;
+        const currentCount = comment.reactions.rocketsCount;
         return {
-          ...post,
+          ...comment,
           reactions: {
-            ...post.reactions,
+            ...comment.reactions,
             isLikedByMe: !isLiked,
             rocketsCount: isLiked ? Math.max(0, currentCount - 1) : currentCount + 1,
           },
         };
-      })
-    );
-  };
-
-  const toggleRepost = (postId: string) => {
-    setPosts((prev) =>
-      prev.map((post) => {
-        if (post.id !== postId) return post;
-        const isReposted = post.reactions.isRepostedByMe ?? false;
-        const currentCount = post.reactions.repostsCount;
-        return {
-          ...post,
-          reactions: {
-            ...post.reactions,
-            isRepostedByMe: !isReposted,
-            repostsCount: isReposted ? Math.max(0, currentCount - 1) : currentCount + 1,
-          },
-        };
-      })
-    );
-  };
-
-  const toggleCommentLike = (postId: string, commentId: string) => {
-    setPosts((prev) =>
-      prev.map((post) => {
-        if (post.id !== postId || !post.comments) return post;
-        const updatedComments = post.comments.map((comment) => {
-          if (comment.id !== commentId) return comment;
-          const isLiked = comment.reactions.isLikedByMe ?? false;
-          const currentCount = comment.reactions.rocketsCount;
-          return {
-            ...comment,
-            reactions: {
-              ...comment.reactions,
-              isLikedByMe: !isLiked,
-              rocketsCount: isLiked ? Math.max(0, currentCount - 1) : currentCount + 1,
-            },
-          };
-        });
-        return {
-          ...post,
-          comments: updatedComments,
-        };
-      })
-    );
+      });
+      return {
+        ...post,
+        comments: updatedComments,
+      };
+    });
+    updateStore(updated);
   };
 
   const addNewPost = (input: CreatePostInput) => {
@@ -153,7 +175,7 @@ export function FeedProvider({ children }: { children: React.ReactNode }) {
       comments: [],
     };
 
-    setPosts((prev) => [newPost, ...prev]);
+    updateStore([newPost, ...posts]);
     closeCreateModal();
   };
 
@@ -180,20 +202,20 @@ export function FeedProvider({ children }: { children: React.ReactNode }) {
       },
     };
 
-    setPosts((prev) =>
-      prev.map((post) => {
-        if (post.id !== postId) return post;
-        const currentComments = post.comments ?? [];
-        return {
-          ...post,
-          reactions: {
-            ...post.reactions,
-            commentsCount: post.reactions.commentsCount + 1,
-          },
-          comments: [...currentComments, newComment],
-        };
-      })
-    );
+    const updated = posts.map((post) => {
+      if (post.id !== postId) return post;
+      const currentComments = post.comments ?? [];
+      return {
+        ...post,
+        reactions: {
+          ...post.reactions,
+          commentsCount: post.reactions.commentsCount + 1,
+        },
+        comments: [...currentComments, newComment],
+      };
+    });
+
+    updateStore(updated);
   };
 
   return (
