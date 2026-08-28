@@ -10,6 +10,9 @@ services:
       AI_BASE_URL: ${AI_BASE_URL}
       AI_API_KEY: ${AI_API_KEY}
       AI_MODEL: ${AI_MODEL}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      NEXT_PUBLIC_ENABLE_DEVTOOLS: ${NEXT_PUBLIC_ENABLE_DEVTOOLS:-true}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
@@ -23,7 +26,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 20s
 
   db:
     image: postgres:16-alpine
@@ -46,7 +49,7 @@ services:
 networks:
   router:
     external: true
-    name: ${ROUTER_NETWORK}
+    name: ${ROUTER_NETWORK:-home_default}
 
 volumes:
   community_pgdata:

@@ -71,15 +71,39 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASS }}
           script: |
+            set -e
+            mkdir -p /opt/community-assistant
             cat > /opt/community-assistant/.env <<'EOF'
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             AI_BASE_URL=${{ secrets.AI_BASE_URL }}
-            ROUTER_NETWORK=${{ secrets.ROUTER_NETWORK }}
+            ROUTER_NETWORK=${{ secrets.ROUTER_NETWORK || 'home_default' }}
             AI_API_KEY=${{ secrets.AI_API_KEY }}
-            AI_MODEL=atomix
+            AI_MODEL=${{ secrets.AI_MODEL || 'atomix' }}
+            BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET || '96d8e7c5b4a39281726f1e0d5c4b3a2198765432' }}
+            BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL || 'http://localhost:8099' }}
+            NEXT_PUBLIC_ENABLE_DEVTOOLS=true
             EOF
-            echo "$(grep '^GH_TOKEN=' /root/.env | cut -d= -f2)" | docker login ghcr.io -u denisetiya --password-stdin || true
+
+            # Ensure external router network exists on host
+            ROUTER_NET="${{ secrets.ROUTER_NETWORK || 'home_default' }}"
+            if [ -n "$ROUTER_NET" ]; then
+              docker network inspect "$ROUTER_NET" >/dev/null 2>&1 || docker network create "$ROUTER_NET"
+              docker network connect "$ROUTER_NET" home-9router-1 --alias 9router 2>/dev/null || true
+            fi
+
+            # Login to GHCR if token is stored in /root/.env
+            if [ -f /root/.env ]; then
+              GH_TOKEN=$(grep '^GH_TOKEN=' /root/.env | cut -d= -f2)
+              if [ -n "$GH_TOKEN" ]; then
+                echo "$GH_TOKEN" | docker login ghcr.io -u denisetiya --password-stdin || true
+              fi
+            fi
+
             cd /opt/community-assistant
-            docker compose up -d --pull always
+            docker compose pull
+            docker compose up -d --remove-orphans
             docker image prune -f
+
+            echo "Deployment successfully completed. Container status:"
+            docker compose ps
