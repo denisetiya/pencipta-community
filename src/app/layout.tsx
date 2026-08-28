@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${plusJakartaSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-100/50">
+      <body className="min-h-screen flex flex-col bg-white text-zinc-900">
         <ViewportProvider>
           <AssistantProvider>
             <DevToolbar />

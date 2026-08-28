@@ -16,3 +16,39 @@ body {
   color: var(--foreground);
   font-family: var(--font-plus-jakarta-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Global Sleek & Slim Scrollbar (WebKit / Chrome / Safari / Edge) */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(161, 161, 170, 0.35);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(113, 113, 122, 0.65);
+}
+
+/* Global Slim Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(161, 161, 170, 0.35) transparent;
+}
+
+/* Utility class to hide scrollbars cleanly if needed */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
