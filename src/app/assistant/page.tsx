@@ -1,4 +1,5 @@
 import { AssistantWorkspace } from "@/components/assistant";
+import { ResponsiveShell } from "@/components/layout";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,8 +9,14 @@ export const metadata: Metadata = {
 
 export default function AssistantPage() {
   return (
-    <div className="h-[100dvh] max-h-[100dvh] w-full overflow-hidden bg-white flex flex-col">
-      <AssistantWorkspace mode="full" />
-    </div>
+    <ResponsiveShell
+      headerTitle="AI Assistant"
+      headerSubtitle="Senior-grade knowledge assistant & conversation workspace"
+      showRightSidebar={false}
+    >
+      <div className="h-[calc(100vh-56px)] w-full overflow-hidden bg-white flex flex-col">
+        <AssistantWorkspace mode="full" />
+      </div>
+    </ResponsiveShell>
   );
 }

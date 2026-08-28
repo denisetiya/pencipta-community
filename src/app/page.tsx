@@ -1,9 +1,19 @@
-import { Logo } from "@/components/ui/logo";
+import type { Metadata } from "next";
+import { ResponsiveShell } from "@/components/layout";
+import { FeedWorkspace } from "@/components/feed";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Home Feed | pencipta-comunity",
+  description: "Community knowledge network, discussions, and updates.",
+};
+
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-white">
-      <Logo size="lg" />
-    </main>
+    <ResponsiveShell
+      headerTitle="Home"
+      headerSubtitle="Explore discussions & knowledge from the community"
+    >
+      <FeedWorkspace />
+    </ResponsiveShell>
   );
 }
