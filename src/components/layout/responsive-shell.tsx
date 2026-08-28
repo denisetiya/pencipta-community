@@ -56,12 +56,6 @@ export function ResponsiveShell({
                   <p className="text-xs text-zinc-500 font-normal">{headerSubtitle}</p>
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 border border-emerald-200/60">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Community
-                </span>
-              </div>
             </header>
 
             {/* Main Content Body */}

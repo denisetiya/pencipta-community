@@ -5,14 +5,14 @@ export const INITIAL_POSTS: PostItem[] = [
     id: "post-1",
     author: {
       id: "user-1",
-      name: "Klinik Koding",
-      handle: "@klinikkoding",
+      name: "Gokce",
+      handle: "@gokce",
       role: "Data Science",
       experience: "3 Years of Experience",
-      initials: "KK",
+      initials: "GK",
     },
     content:
-      "Hello friends! 🚀\n\nMany people asked about the data structures material last week. We've put together an essential cheat sheet to prepare for tomorrow's midterm exam. Keep up the good work!\n\nThe link to the material is in the bio. 👇",
+      "Hello friends!\n\nMany people asked about the data structures material last week. We've put together an essential cheat sheet to prepare for tomorrow's midterm exam. Keep up the good work!\n\nThe link to the material is in the bio.",
     createdAt: "2j",
     formattedDate: "18.08.2026 • 20:10",
     quotesCount: 0,
@@ -39,7 +39,7 @@ export const INITIAL_POSTS: PostItem[] = [
           initials: "MY",
         },
         content:
-          "Provakosyanlara karşı herkes uyanık olmalı . Bu işin muhatapları daha dikkatli olmalı. Devletimizin de bu gibi işlere fırsat vermemesi için gerekli önlemleri almalı.",
+          "Provakosyanlara karşı herkes uyanık olmalı. Bu işin muhatapları daha dikkatli olmalı. Devletimizin de bu gibi işlere fırsat vermemesi için gerekli önlemleri almalı.",
         createdAt: "38m",
         reactions: {
           commentsCount: 0,
@@ -63,7 +63,7 @@ export const INITIAL_POSTS: PostItem[] = [
       initials: "BP",
     },
     content:
-      "Does anyone have any recommendations for a fun place to work on assignments with fast Wi-Fi around campus? I'm bored of being stuck in the library all the time. ☕💻",
+      "Does anyone have any recommendations for a fun place to work on assignments with fast Wi-Fi around campus? I'm bored of being stuck in the library all the time.",
     createdAt: "4j",
     formattedDate: "18.08.2026 • 18:45",
     quotesCount: 0,
@@ -110,7 +110,7 @@ export const INITIAL_POSTS: PostItem[] = [
       initials: "BP",
     },
     content:
-      "Does anyone have any recommendations for a fun place to work on assignments with fast Wi-Fi around campus? I'm bored of being stuck in the library all the time. ☕💻",
+      "Does anyone have any recommendations for a fun place to work on assignments with fast Wi-Fi around campus? I'm bored of being stuck in the library all the time.",
     createdAt: "4j",
     formattedDate: "18.08.2026 • 18:45",
     quotesCount: 0,
@@ -134,7 +134,7 @@ export const INITIAL_POSTS: PostItem[] = [
       initials: "AS",
     },
     content:
-      "Just finished mentoring session with our junior fellows discussing Design Systems in Figma. Seeing their 'aha!' moments is always the best feeling ✨ Always happy to connect and give portfolio feedback!",
+      "Just finished mentoring session with our junior fellows discussing Design Systems in Figma. Seeing their 'aha!' moments is always the best feeling. Always happy to connect and give portfolio feedback!",
     createdAt: "6j",
     formattedDate: "18.08.2026 • 15:20",
     quotesCount: 1,
