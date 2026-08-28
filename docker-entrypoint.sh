@@ -4,7 +4,7 @@ set -e
 if [ -n "${DATABASE_URL:-}" ]; then
   echo "Waiting for database..."
   i=0
-  until node node_modules/prisma/build/index.js migrate deploy; do
+  until prisma migrate deploy; do
     i=$((i+1))
     if [ "$i" -ge 30 ]; then
       echo "Database not reachable after 30 attempts, giving up."
