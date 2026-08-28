@@ -22,7 +22,7 @@ async function main() {
     where: { email: "mentor@demo.pencipta" },
     update: {},
     create: {
-      name: "Gökçe",
+      name: "kodingKuy",
       email: "mentor@demo.pencipta",
       handle: "gokce",
       headline: "Startup founder · raised 2 rounds",

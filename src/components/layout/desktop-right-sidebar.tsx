@@ -21,10 +21,10 @@ export function DesktopRightSidebar() {
   const suggestedMentors = [
     {
       id: "m1",
-      name: "Gökçe",
+      name: "KodingBre",
       role: "Startup Founder",
       experience: "8 YOE · Raised 2 Rounds",
-      initials: "GK",
+      initials: "KB",
     },
     {
       id: "m2",
@@ -35,10 +35,10 @@ export function DesktopRightSidebar() {
     },
     {
       id: "m3",
-      name: "Gokce",
+      name: "Klinik Koding",
       role: "Data Science Lead",
       experience: "5 YOE · Machine Learning",
-      initials: "GK",
+      initials: "KK",
     },
   ];
 
