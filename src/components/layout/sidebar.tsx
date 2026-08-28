@@ -13,10 +13,10 @@ const items = [
 
 export function Sidebar() {
   return (
-    <aside className="hidden h-screen w-64 flex-col border-r border-slate-200 px-4 py-6 md:flex bg-white">
+    <aside className="hidden h-screen w-64 flex-col border-r border-zinc-200/80 px-4 py-6 md:flex bg-white">
       <Link href="/" className="mb-8 flex items-center gap-2.5 px-2">
         <Logo size="sm" />
-        <span className="text-lg font-bold tracking-tight text-slate-900">
+        <span className="text-lg font-bold tracking-tight text-zinc-900">
           pencipta-comunity
         </span>
       </Link>
@@ -29,10 +29,10 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[15px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+                "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[15px] font-medium text-zinc-600 transition-colors hover:bg-zinc-100/80 hover:text-zinc-900"
               )}
             >
-              <Icon className="h-4.5 w-4.5 shrink-0 text-slate-500" />
+              <Icon className="h-4.5 w-4.5 shrink-0 text-zinc-500" />
               <span>{item.label}</span>
             </Link>
           );
