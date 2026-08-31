@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, Sparkles, TrendingUp, UserPlus, Check, ArrowRight } from "lucide-react";
+import { Search, TrendingUp, UserPlus, Check, ArrowRight, Bot } from "lucide-react";
 import { useAssistant } from "@/components/assistant/context/assistant-context";
 
 export function DesktopRightSidebar() {
@@ -65,7 +65,7 @@ export function DesktopRightSidebar() {
       {/* AI Knowledge Network Card */}
       <div className="rounded-3xl border border-cyan-100 bg-gradient-to-br from-cyan-50/80 via-white to-sky-50/50 p-5 shadow-xs">
         <div className="flex items-center gap-2 text-cyan-800 text-xs font-bold tracking-tight">
-          <Sparkles className="h-4 w-4 text-cyan-600 animate-pulse" />
+          <Bot className="h-4 w-4 text-cyan-600" />
           <span>AI MENTOR ASSISTANT</span>
         </div>
         <p className="mt-1.5 text-xs font-bold text-zinc-900 leading-snug">

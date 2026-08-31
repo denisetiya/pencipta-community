@@ -13,8 +13,9 @@ export default function AssistantPage() {
       headerTitle="AI Assistant"
       headerSubtitle="Senior-grade knowledge assistant & conversation workspace"
       showRightSidebar={false}
+      showHeader={false}
     >
-      <div className="h-[calc(100vh-56px)] w-full overflow-hidden bg-white flex flex-col">
+      <div className="h-full flex-1 w-full overflow-hidden bg-white flex flex-col min-h-0">
         <AssistantWorkspace mode="full" />
       </div>
     </ResponsiveShell>

@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
 import { ResponsiveShell } from "@/components/layout";
-import { ComingSoon } from "@/components/ui/coming-soon";
-import { Search } from "lucide-react";
+import { SearchView } from "@/components/search";
 
 export const metadata: Metadata = {
   title: "Explore & Search | pencipta-comunity",
-  description: "Search community members, mentors, topics, and discussions is coming soon.",
+  description: "Search community members, mentors, topics, and discussions.",
 };
 
 export default function SearchPage() {
   return (
     <ResponsiveShell
-      headerTitle="Search"
-      headerSubtitle="Explore community mentors & knowledge"
+      headerTitle="Search & Explore"
+      headerSubtitle="Discover trending discussions, topics & community mentors"
+      showMobileHeader={false}
     >
-      <ComingSoon
-        title="Search & Explore"
-        description="Our AI knowledge search and mentor matching engine is indexing verified community discussions and expertise. Coming soon!"
-        icon={Search}
-        badge="Coming Soon"
-      />
+      <SearchView />
     </ResponsiveShell>
   );
 }

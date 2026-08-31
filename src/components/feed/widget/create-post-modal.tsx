@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Image as ImageIcon, Sparkles } from "lucide-react";
+import { X, Image as ImageIcon, PlusCircle } from "lucide-react";
 import { useFeed } from "../context/feed-context";
 
 export function CreatePostModal() {
@@ -42,7 +42,7 @@ export function CreatePostModal() {
       <div className="relative z-10 w-full max-w-lg rounded-3xl bg-white p-5 shadow-2xl border border-zinc-100 animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-cyan-500" />
+            <PlusCircle className="h-4 w-4 text-zinc-900" />
             <h2 className="text-base font-bold text-zinc-900">New Community Post</h2>
           </div>
           <button

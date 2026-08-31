@@ -13,8 +13,9 @@ export default function AskPage() {
       headerTitle="Ask Community AI"
       headerSubtitle="Get instant verified insights & mentorship recommendations"
       showRightSidebar={false}
+      showHeader={false}
     >
-      <div className="h-[calc(100vh-56px)] w-full overflow-hidden bg-white flex flex-col">
+      <div className="h-full flex-1 w-full overflow-hidden bg-white flex flex-col min-h-0">
         <AssistantWorkspace mode="full" />
       </div>
     </ResponsiveShell>
