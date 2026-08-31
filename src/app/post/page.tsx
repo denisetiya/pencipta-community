@@ -12,7 +12,11 @@ export default function DefaultPostPage() {
   const post = INITIAL_POSTS[0]!;
 
   return (
-    <ResponsiveShell headerTitle="Post" headerSubtitle="Discussion thread & comments">
+    <ResponsiveShell
+      headerTitle="Post"
+      headerSubtitle="Discussion thread & comments"
+      showMobileHeader={false}
+    >
       <PostDetailView post={post} />
     </ResponsiveShell>
   );

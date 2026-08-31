@@ -5,15 +5,12 @@ import {
   ChevronLeft,
   SquarePen,
   History,
-  Wifi,
-  Battery,
-  BatteryMedium,
-  Signal,
   PanelLeftClose,
   PanelLeft,
   Plus,
 } from "lucide-react";
 import { useViewport, PlatformType } from "@/context/viewport-context";
+import { MobileStatusBar } from "@/components/layout/mobile-status-bar";
 
 interface HeaderProps {
   title: string;
@@ -24,6 +21,7 @@ interface HeaderProps {
   activeView?: "chat" | "history";
   isDesktopSidebarOpen?: boolean;
   onToggleDesktopSidebar?: () => void;
+  showStatusBar?: boolean;
 }
 
 export function Header({
@@ -35,6 +33,7 @@ export function Header({
   activeView = "chat",
   isDesktopSidebarOpen = true,
   onToggleDesktopSidebar,
+  showStatusBar = true,
 }: HeaderProps) {
   const { platform: globalPlatform } = useViewport();
   const platform = customPlatform ?? globalPlatform;
@@ -92,37 +91,8 @@ export function Header({
   // Mobile / Native Header (Android, iOS, or responsive)
   return (
     <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-md transition-colors border-b border-zinc-100/60">
-      {/* Android Status Bar */}
-      {platform === "android" && (
-        <div className="flex h-7 items-center justify-between px-6 pt-1 text-[11px] font-medium text-zinc-800 select-none">
-          <span>9:41</span>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-bold">5G</span>
-            <Signal className="h-3 w-3 fill-current" strokeWidth={2.5} />
-            <Wifi className="h-3 w-3" strokeWidth={2.5} />
-            <BatteryMedium className="h-3.5 w-3.5" strokeWidth={2.2} />
-          </div>
-        </div>
-      )}
-
-      {/* iOS Status Bar with Dynamic Island */}
-      {platform === "ios" && (
-        <div className="relative flex h-11 items-center justify-between px-7 pt-1.5 text-xs font-semibold text-zinc-900 select-none">
-          <span className="font-semibold">9:41</span>
-
-          {/* Apple Dynamic Island */}
-          <div className="absolute left-1/2 top-2.5 -translate-x-1/2 flex items-center justify-between h-6 w-24 rounded-full bg-black px-2.5 shadow-xs select-none">
-            <div className="h-2.5 w-2.5 rounded-full bg-zinc-900 border border-zinc-800" />
-            <div className="h-2 w-2 rounded-full bg-zinc-900" />
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <Signal className="h-3.5 w-3.5 fill-current" strokeWidth={2.5} />
-            <Wifi className="h-3.5 w-3.5" strokeWidth={2.5} />
-            <Battery className="h-4 w-4 fill-current" strokeWidth={2.5} />
-          </div>
-        </div>
-      )}
+      {/* Mobile Status Bar (Rendered only if enabled and in mobile platform simulation) */}
+      {showStatusBar && <MobileStatusBar platform={platform} />}
 
       {/* Main Navigation Bar */}
       <div className="relative flex h-14 items-center justify-between px-4 sm:px-6">

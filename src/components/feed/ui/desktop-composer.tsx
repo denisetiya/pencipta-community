@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Image as ImageIcon, Sparkles } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 import { useFeed } from "../context/feed-context";
 
 export function DesktopComposer() {
@@ -62,11 +62,6 @@ export function DesktopComposer() {
                 <ImageIcon className="h-3.5 w-3.5" />
                 <span>{hasAttachment ? "Box Attached" : "Add Media"}</span>
               </button>
-
-              <span className="flex items-center gap-1 text-[11px] font-semibold text-cyan-800 bg-cyan-50 px-2.5 py-1 rounded-full border border-cyan-200/60">
-                <Sparkles className="h-3.5 w-3.5 text-cyan-600" />
-                <span>AI Enhanced</span>
-              </span>
             </div>
 
             <button

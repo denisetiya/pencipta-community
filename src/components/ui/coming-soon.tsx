@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { LucideIcon, Sparkles, ArrowLeft } from "lucide-react";
+import { LucideIcon, Layers, ArrowLeft } from "lucide-react";
 
 interface ComingSoonProps {
   title: string;
@@ -12,16 +12,13 @@ interface ComingSoonProps {
 export function ComingSoon({
   title,
   description = "This feature is currently under active development and will be available in an upcoming release.",
-  icon: Icon = Sparkles,
+  icon: Icon = Layers,
   badge = "Coming Soon",
 }: ComingSoonProps) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-8 py-24 text-center select-none">
       <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-zinc-100/80 shadow-xs border border-zinc-200/60">
         <Icon className="h-9 w-9 text-zinc-700 stroke-[1.8]" />
-        <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-600 text-white shadow-xs">
-          <Sparkles className="h-3 w-3" />
-        </span>
       </div>
 
       <span className="inline-block rounded-full bg-zinc-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-zinc-600 mb-2">

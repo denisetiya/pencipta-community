@@ -27,7 +27,11 @@ export default async function PostDetailPage({ params }: PostPageProps) {
   }
 
   return (
-    <ResponsiveShell headerTitle="Post" headerSubtitle="Discussion thread & comments">
+    <ResponsiveShell
+      headerTitle="Post"
+      headerSubtitle="Discussion thread & comments"
+      showMobileHeader={false}
+    >
       <PostDetailView post={post} />
     </ResponsiveShell>
   );

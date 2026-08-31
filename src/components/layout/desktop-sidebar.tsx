@@ -9,7 +9,6 @@ import {
   MessageCircle,
   User,
   Bot,
-  Sparkles,
   TrendingUp,
   Bookmark,
   PlusCircle,
@@ -58,7 +57,7 @@ export function DesktopSidebar() {
           </div>
         </Link>
 
-        {/* Navigation Links (Clean styling without active black background box) */}
+        {/* Navigation Links */}
         <nav className="flex flex-col gap-1">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -87,10 +86,6 @@ export function DesktopSidebar() {
                   <span>{item.label}</span>
                 </div>
 
-                {item.isAi && (
-                  <Sparkles className="h-4 w-4 text-cyan-500 animate-pulse" />
-                )}
-
                 {item.badge && (
                   <span className="rounded-full bg-cyan-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
                     {item.badge}
@@ -114,26 +109,32 @@ export function DesktopSidebar() {
 
       {/* Bottom Section: User Profile Card */}
       <div className="border-t border-zinc-100 pt-3">
-        <div className="flex items-center justify-between rounded-2xl p-2 hover:bg-zinc-100/70 transition-colors cursor-pointer group">
+        <Link
+          href="/profile"
+          className="flex items-center justify-between rounded-2xl p-2 hover:bg-zinc-100/70 transition-colors cursor-pointer group"
+        >
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-bold text-white">
-              ME
+              AR
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs font-bold text-zinc-900 leading-tight">
-                Community User
+                Alex Rivera
               </p>
-              <p className="truncate text-[11px] text-zinc-400">@community_user</p>
+              <p className="truncate text-[11px] text-zinc-400">@alexrivera</p>
             </div>
           </div>
-          <Link
-            href="/login"
+          <span
             title="Sign out"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/login";
+            }}
             className="rounded-lg p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors"
           >
             <LogOut className="h-4 w-4" />
-          </Link>
-        </div>
+          </span>
+        </Link>
       </div>
     </aside>
   );

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAssistant } from "../context/assistant-context";
 import { AssistantWorkspace } from "../assistant-workspace";
-import { X, Maximize2, Sparkles } from "lucide-react";
+import { X, Maximize2, Bot } from "lucide-react";
 
 export function FloatingWidget() {
   const pathname = usePathname();
@@ -55,7 +55,7 @@ export function FloatingWidget() {
           }`}
         >
           <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-md border border-zinc-200/80 backdrop-blur-md">
-            <Sparkles className="h-3.5 w-3.5 text-cyan-500" />
+            <Bot className="h-3.5 w-3.5 text-cyan-500" />
             <span>AI Assistant</span>
             <kbd className="ml-1 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-mono text-zinc-500 border border-zinc-200">
               Cmd+K

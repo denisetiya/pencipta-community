@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
 import { ResponsiveShell } from "@/components/layout";
-import { ComingSoon } from "@/components/ui/coming-soon";
-import { User } from "lucide-react";
+import { ProfileView } from "@/components/profile";
 
 export const metadata: Metadata = {
-  title: "Profile | pencipta-comunity",
-  description: "AI-generated knowledge profile is coming soon.",
+  title: "Alex Rivera (@alexrivera) | pencipta-comunity",
+  description: "Product Designer | Alumni DKV 2021 on pencipta-comunity.",
 };
 
 export default function ProfilePage() {
   return (
     <ResponsiveShell
       headerTitle="Profile"
-      headerSubtitle="AI knowledge profile & verified credentials"
+      headerSubtitle="User profile, credentials & discussions"
+      showMobileHeader={false}
     >
-      <ComingSoon
-        title="User Profile"
-        description="Manage your AI-extracted knowledge profile, verified skill chips, and mentorship track record here soon!"
-        icon={User}
-        badge="Coming Soon"
-      />
+      <ProfileView />
     </ResponsiveShell>
   );
 }

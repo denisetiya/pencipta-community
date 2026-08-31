@@ -25,12 +25,12 @@ export function PostDetailView({ post: initialPost }: PostDetailViewProps) {
   return (
     <div className="flex min-h-full flex-col bg-white">
       {/* Top Header with Mobile Status Bar + Back Navigation */}
-      <div className="sticky top-0 z-30 flex w-full flex-col border-b border-zinc-100/90 bg-white/95 backdrop-blur-md">
+      <div className="sticky top-0 z-30 flex w-full flex-col border-b border-zinc-100/90 bg-white/95 backdrop-blur-md md:hidden">
         {/* Mobile Platform Status Bar (Android & iOS in Dev Mode / Mobile Viewports) */}
         <MobileStatusBar />
 
         {/* Header Bar */}
-        <div className="flex h-14 w-full items-center justify-between px-4 md:px-6">
+        <div className="flex h-14 w-full items-center justify-between px-4">
           <button
             type="button"
             onClick={() => router.back()}

@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/logo";
 import { AssistantMessage, PlatformType } from "../types/assistant.types";
-import { Sparkles, Copy, Check } from "lucide-react";
+import { Copy, Check, MessageSquare } from "lucide-react";
 
 interface ChatViewProps {
   messages: AssistantMessage[];
@@ -57,7 +57,7 @@ export function ChatView({
               onClick={() => onSelectSuggestion?.(suggestion)}
               className="group flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs sm:text-sm font-medium text-zinc-700 shadow-2xs transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900 active:scale-95 cursor-pointer"
             >
-              <Sparkles className="h-3.5 w-3.5 text-cyan-500 transition-transform group-hover:scale-110" />
+              <MessageSquare className="h-3.5 w-3.5 text-cyan-600 transition-transform group-hover:scale-110" />
               <span>{suggestion}</span>
             </button>
           ))}
