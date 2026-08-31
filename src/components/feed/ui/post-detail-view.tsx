@@ -7,7 +7,6 @@ import type { PostItem } from "../types/feed.types";
 import { PostActions } from "./post-actions";
 import { CommentCard } from "./comment-card";
 import { CommentInputBar } from "./comment-input-bar";
-import { MobileStatusBar } from "@/components/layout/mobile-status-bar";
 import { useFeed } from "../context/feed-context";
 
 interface PostDetailViewProps {
@@ -24,11 +23,8 @@ export function PostDetailView({ post: initialPost }: PostDetailViewProps) {
 
   return (
     <div className="flex min-h-full flex-col bg-white">
-      {/* Top Header with Mobile Status Bar + Back Navigation */}
+      {/* Top Header with Back Navigation (Mobile viewports) */}
       <div className="sticky top-0 z-30 flex w-full flex-col border-b border-zinc-100/90 bg-white/95 backdrop-blur-md md:hidden">
-        {/* Mobile Platform Status Bar (Android & iOS in Dev Mode / Mobile Viewports) */}
-        <MobileStatusBar />
-
         {/* Header Bar */}
         <div className="flex h-14 w-full items-center justify-between px-4">
           <button

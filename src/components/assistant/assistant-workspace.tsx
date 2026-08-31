@@ -76,7 +76,6 @@ export function AssistantWorkspace({
         <Header
           title={activeView === "history" ? "History" : currentSession ? currentSession.title : "AI Assistant"}
           platform={platform}
-          showStatusBar={false}
           onBack={handleBack}
           onNewChat={startNewChat}
           onOpenHistory={() => setActiveView("history")}

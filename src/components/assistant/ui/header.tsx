@@ -10,7 +10,6 @@ import {
   Plus,
 } from "lucide-react";
 import { useViewport, PlatformType } from "@/context/viewport-context";
-import { MobileStatusBar } from "@/components/layout/mobile-status-bar";
 
 interface HeaderProps {
   title: string;
@@ -21,7 +20,6 @@ interface HeaderProps {
   activeView?: "chat" | "history";
   isDesktopSidebarOpen?: boolean;
   onToggleDesktopSidebar?: () => void;
-  showStatusBar?: boolean;
 }
 
 export function Header({
@@ -33,7 +31,6 @@ export function Header({
   activeView = "chat",
   isDesktopSidebarOpen = true,
   onToggleDesktopSidebar,
-  showStatusBar = true,
 }: HeaderProps) {
   const { platform: globalPlatform } = useViewport();
   const platform = customPlatform ?? globalPlatform;
@@ -91,9 +88,6 @@ export function Header({
   // Mobile / Native Header (Android, iOS, or responsive)
   return (
     <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-md transition-colors border-b border-zinc-100/60">
-      {/* Mobile Status Bar (Rendered only if enabled and in mobile platform simulation) */}
-      {showStatusBar && <MobileStatusBar platform={platform} />}
-
       {/* Main Navigation Bar */}
       <div className="relative flex h-14 items-center justify-between px-4 sm:px-6">
         <button

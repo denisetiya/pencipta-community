@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Menu } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { DrawerMenu } from "./drawer-menu";
-import { MobileStatusBar } from "./mobile-status-bar";
 
 interface HomeHeaderProps {
   className?: string;
@@ -31,10 +30,7 @@ export function HomeHeader({ className = "", onOpenMenu }: HomeHeaderProps) {
       <header
         className={`sticky top-0 z-30 flex w-full flex-col border-b border-zinc-100/90 bg-white/95 backdrop-blur-md transition-colors ${className}`}
       >
-        {/* Mobile Platform Status Bar (Android & iOS in Dev Mode / Mobile Viewports) */}
-        <MobileStatusBar />
-
-        {/* Main Navigation Header Bar (Sitting below Status Bar) */}
+        {/* Main Navigation Header Bar */}
         <div className="relative flex h-14 w-full items-center justify-between px-4">
           {/* Left Hamburger Menu Button */}
           <button

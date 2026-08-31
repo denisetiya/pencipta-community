@@ -13,7 +13,6 @@ import {
   Rocket,
   Bookmark,
 } from "lucide-react";
-import { MobileStatusBar } from "@/components/layout/mobile-status-bar";
 import { CURRENT_PROFILE, ALEX_POSTS, UserProfile } from "./data/mock-profile";
 import { PostItem } from "@/components/feed/types/feed.types";
 
@@ -88,9 +87,6 @@ export function ProfileView() {
     <div className="flex min-h-full flex-col bg-white">
       {/* Top Header Bar */}
       <div className="sticky top-0 z-30 flex w-full flex-col border-b border-zinc-100/90 bg-white/95 backdrop-blur-md">
-        {/* Mobile Platform Status Bar */}
-        <MobileStatusBar className="md:hidden" />
-
         {/* Header Content */}
         <div className="relative flex h-14 w-full items-center justify-between px-4 md:px-6">
           <div className="w-9" aria-hidden="true" />

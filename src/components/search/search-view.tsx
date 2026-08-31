@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from "react";
 import { Search, X, MoreHorizontal, MessageSquare, Coffee, Cpu, Palette } from "lucide-react";
-import { MobileStatusBar } from "@/components/layout/mobile-status-bar";
 import {
   INITIAL_TRENDING_ITEMS,
   SEARCH_TABS,
@@ -77,9 +76,6 @@ export function SearchView() {
     <div className="flex min-h-full flex-col bg-white">
       {/* Top Sticky Search Bar Container */}
       <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-zinc-100/90">
-        {/* Mobile Platform Status Bar */}
-        <MobileStatusBar className="md:hidden" />
-
         {/* Search Input Box */}
         <div className="px-4 pt-3 pb-2 md:px-6">
           <div className="relative flex items-center">
